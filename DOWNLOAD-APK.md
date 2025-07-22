@@ -31,22 +31,37 @@ https://github.com/LengendGamerYT/Minecraft-sever-hosting-AI-Name-of-Hosting-JP-
 
 ---
 
-## 🔨 **OPTION 2: Build APK Online**
+## 🔨 **OPTION 2: Build APK Online (WORKING SERVICES)**
 
-### **Using PhoneGap Build (FREE)**
-1. Go to: https://build.phonegap.com
+### **🚀 VoltBuilder (RECOMMENDED - $15/month, 15-day FREE trial)**
+1. Go to: https://volt.build/
+2. Sign up (15-day free trial, no upfront cost)
+3. Click **"Upload"** → Select your `jp-hosting-apk-package.zip`
+4. Click **"Android"** build
+5. Wait 5-10 minutes
+6. Download your **JP Hosting APK** with QR code!
+
+### **🆓 AppsGeyser (100% FREE)**
+1. Go to: https://appsgeyser.com/apk-maker
 2. Create free account
-3. Click **"Upload a .zip file"**
-4. Upload your `jp-hosting-apk-package.zip`
-5. Click **"Ready to build"**
-6. Wait 5-10 minutes
-7. Download **JP Hosting APK**!
+3. Choose **"Website to APK"** template
+4. Upload your package or enter your website URL
+5. Customize app name and icon
+6. Build and download APK for FREE!
 
-### **Using Capacitor Online**
-1. Go to: https://capacitorjs.com/
-2. Look for online build services
+### **💻 HTML2App (FREE for basic builds)**
+1. Go to: https://html2app.dev/
+2. Login with GitHub
+3. Click **"Build Android App"** → **"Choose File"**
+4. Upload your `jp-hosting-apk-package.zip`
+5. Wait for build completion
+6. Download APK directly!
+
+### **🌐 Website2APK (FREE trial available)**
+1. Go to: https://websitetoapk.com/
+2. Download their free software
 3. Upload your package
-4. Build APK online
+4. Build APK with their desktop tool
 
 ---
 
@@ -107,10 +122,14 @@ npx cap open android
 
 ### **For Mobile Users:**
 1. **Download** package from GitHub
-2. **Upload** to PhoneGap Build
-3. **Build** APK online
-4. **Install** on Android
-5. **Launch** JP Hosting!
+2. **Choose your build service:**
+   - **🆓 FREE**: https://appsgeyser.com/apk-maker
+   - **🚀 BEST**: https://volt.build/ (15-day free trial)
+   - **💻 GITHUB**: https://html2app.dev/
+3. **Upload** your ZIP file
+4. **Build** APK online
+5. **Install** on Android
+6. **Launch** JP Hosting!
 
 ### **Payment Setup:**
 - All payments go to: **`jaydendpenha@fam`**
@@ -128,8 +147,9 @@ npx cap open android
 
 ### **If Download Doesn't Work:**
 1. Try the **Manual Workflow** in GitHub Actions
-2. Use **PhoneGap Build** directly
-3. Contact GitHub support
+2. Use **AppsGeyser** (100% free alternative)
+3. Try **VoltBuilder** (15-day free trial)
+4. Contact GitHub support
 
 ### **If Build Fails:**
 1. Check file integrity (should be 519KB)
