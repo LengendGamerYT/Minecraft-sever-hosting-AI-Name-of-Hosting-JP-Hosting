@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import UPIPayment from './UPIPayment';
 import { 
@@ -8,7 +8,6 @@ import {
   Plus, 
   Crown, 
   Gift,
-  ExternalLink,
   Copy,
   Settings,
   Trash2

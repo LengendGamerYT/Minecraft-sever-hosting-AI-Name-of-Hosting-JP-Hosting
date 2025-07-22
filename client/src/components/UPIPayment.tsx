@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Copy, Check, QrCode, Smartphone, CreditCard } from 'lucide-react';
+import React, { useState } from 'react';
+import { Copy, Check, QrCode, Smartphone } from 'lucide-react';
 
 interface Plan {
   _id: string;

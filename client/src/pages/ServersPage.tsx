@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import ServerControlPanel from '../components/ServerControlPanel';
 import { 
   Server, 
   Plus, 
@@ -7,10 +8,8 @@ import {
   Square, 
   Settings, 
   Trash2, 
-  Users, 
-  Activity,
-  Clock,
-  MapPin
+  Monitor,
+  Terminal
 } from 'lucide-react';
 
 interface ServerData {

@@ -3,7 +3,6 @@ import { useAuth } from '../contexts/AuthContext';
 import UPIPayment from '../components/UPIPayment';
 import { 
   Check, 
-  Crown, 
   Zap, 
   Shield, 
   Globe, 

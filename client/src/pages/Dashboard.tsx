@@ -8,7 +8,6 @@ import {
   Users, 
   Activity, 
   Clock, 
-  Zap,
   TrendingUp,
   Gift,
   Crown,
