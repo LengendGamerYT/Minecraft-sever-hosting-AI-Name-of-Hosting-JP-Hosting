@@ -1,0 +1,96 @@
+name: Build and Release Android APK
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+        
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+      
+    - name: Install dependencies
+      run: |
+        cd client
+        npm ci
+        
+    - name: Build React app
+      run: |
+        cd client
+        npm run build
+        
+    - name: Install Capacitor CLI
+      run: |
+        cd client
+        npm install -g @capacitor/cli
+        
+    - name: Sync Capacitor
+      run: |
+        cd client
+        npx cap sync android
+        
+    - name: Build Android APK
+      run: |
+        cd client/android
+        chmod +x ./gradlew
+        ./gradlew assembleDebug
+        
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: jp-hosting-debug.apk
+        path: client/android/app/build/outputs/apk/debug/app-debug.apk
+        
+    - name: Create Release
+      if: github.ref == 'refs/heads/main'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.run_number }}
+        name: JP Hosting v${{ github.run_number }}
+        body: |
+          🚀 **JP Hosting - Minecraft Server Hosting App**
+          
+          ✨ **Features:**
+          - Advanced Server Control Panel (Darco-style)
+          - Custom Domain Management (.hosting.jp free, paid domains)
+          - UPI Payment Integration (jaydendpenha@fam)
+          - Real-time Server Monitoring
+          - File Manager with Editor
+          - Persistent Authentication
+          - Beautiful Modern UI
+          
+          📱 **Installation:**
+          1. Download the APK file below
+          2. Enable "Install from Unknown Sources" on your Android device
+          3. Install and enjoy your Minecraft server hosting platform!
+          
+          💰 **Payment:** All transactions go to UPI ID: jaydendpenha@fam
+          
+        files: |
+          client/android/app/build/outputs/apk/debug/app-debug.apk
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
