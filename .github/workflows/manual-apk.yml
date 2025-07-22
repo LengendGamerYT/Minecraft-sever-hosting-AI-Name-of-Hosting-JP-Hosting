@@ -1,0 +1,104 @@
+name: Manual APK Build
+
+on:
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'debug'
+        type: choice
+        options:
+        - debug
+        - release
+
+jobs:
+  create-apk-package:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        
+    - name: Install dependencies
+      run: |
+        cd client
+        npm install
+        
+    - name: Build React app
+      run: |
+        cd client
+        npm run build
+        
+    - name: Create APK package
+      run: python3 create-apk-direct.py
+      
+    - name: Upload APK package
+      uses: actions/upload-artifact@v4
+      with:
+        name: jp-hosting-apk-package
+        path: jp-hosting-apk-package.zip
+        
+    - name: Create Release with Package
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: apk-package-${{ github.run_number }}
+        name: JP Hosting APK Package v${{ github.run_number }}
+        body: |
+          📱 **JP Hosting APK Package - Ready to Build!**
+          
+          Since GitHub Actions APK builds can be complex, here's a **ready-to-build package** that you can use with online build services!
+          
+          ## 🚀 **How to Get Your APK:**
+          
+          ### **Option 1: Online Build (EASIEST)**
+          1. Download `jp-hosting-apk-package.zip` below
+          2. Go to https://build.phonegap.com (or similar service)
+          3. Create free account
+          4. Upload the ZIP file
+          5. Click "Build APK"
+          6. Download your JP Hosting APK!
+          
+          ### **Option 2: Local Build**
+          1. Download and extract the package
+          2. Install Capacitor CLI: `npm install -g @capacitor/cli`
+          3. Run: `npx cap add android`
+          4. Run: `npx cap sync android`
+          5. Build with Android Studio
+          
+          ## ✨ **Features in Your APK:**
+          - 🎮 **Advanced Server Control Panel** (Darco-style)
+            • Live console with command execution
+            • File manager with editor
+            • Real-time server monitoring
+            • Start/Stop/Restart controls
+          
+          - 🌐 **Custom Domain Management**
+            • FREE .hosting.jp domain
+            • Paid domains: .fun (₹50), .com (₹100), .net (₹150), .in (₹200)
+          
+          - 💰 **UPI Payment Integration**
+            • All payments to: **jaydendpenha@fam**
+            • QR code generation
+            • Transaction verification
+          
+          - 🔐 **Persistent Authentication**
+          - 🎨 **Beautiful Modern UI**
+          
+          ## 💳 **Payment Info:**
+          All transactions go to UPI ID: **jaydendpenha@fam**
+          
+          ## 🆓 **Free Plan:**
+          7-day free server + free .hosting.jp domain!
+          
+        files: |
+          jp-hosting-apk-package.zip
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
