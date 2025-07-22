@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { Link } from 'react-router-dom';
+import DomainManager from '../components/DomainManager';
 import { 
   Server, 
   Plus, 
@@ -10,7 +11,8 @@ import {
   Zap,
   TrendingUp,
   Gift,
-  Crown
+  Crown,
+  Globe
 } from 'lucide-react';
 
 const Dashboard: React.FC = () => {
@@ -21,6 +23,7 @@ const Dashboard: React.FC = () => {
     totalPlayers: 0,
     uptime: '99.9%'
   });
+  const [showDomainManager, setShowDomainManager] = useState(false);
 
   useEffect(() => {
     // Simulate fetching dashboard stats
@@ -53,6 +56,13 @@ const Dashboard: React.FC = () => {
       icon: Server,
       color: 'from-blue-500 to-blue-600',
       link: '/servers'
+    },
+    {
+      title: 'Custom Domains',
+      description: 'Add domains to your servers',
+      icon: Globe,
+      color: 'from-indigo-500 to-indigo-600',
+      action: () => setShowDomainManager(true)
     }
   ];
 
@@ -146,20 +156,65 @@ const Dashboard: React.FC = () => {
         {/* Quick Actions */}
         <div className="mb-8">
           <h2 className="text-2xl font-bold text-white mb-6">Quick Actions</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {quickActions.map((action, index) => (
-              <Link
+              <div
                 key={index}
-                to={action.link}
-                className="group glass rounded-xl p-6 hover:scale-105 transition-all duration-300"
+                onClick={action.action || (() => window.location.href = action.link!)}
+                className="group glass rounded-xl p-6 hover:scale-105 transition-all duration-300 cursor-pointer"
               >
                 <div className={`w-12 h-12 bg-gradient-to-r ${action.color} rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                   <action.icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-2">{action.title}</h3>
                 <p className="text-blue-200">{action.description}</p>
-              </Link>
+              </div>
             ))}
+          </div>
+        </div>
+
+        {/* Domain Pricing Preview */}
+        <div className="mb-8">
+          <div className="glass rounded-2xl p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-xl font-bold text-white mb-2">Custom Domains Available</h3>
+                <p className="text-blue-200">Professional domains for your Minecraft servers</p>
+              </div>
+              <button
+                onClick={() => setShowDomainManager(true)}
+                className="bg-gradient-to-r from-indigo-500 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-indigo-600 hover:to-indigo-700 transition-colors flex items-center space-x-2"
+              >
+                <Globe className="w-5 h-5" />
+                <span>Manage Domains</span>
+              </button>
+            </div>
+            
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+              <div className="bg-green-500 bg-opacity-20 border border-green-400 border-opacity-30 rounded-lg p-3 text-center">
+                <div className="flex items-center justify-center mb-2">
+                  <Gift className="w-4 h-4 text-green-400 mr-1" />
+                  <span className="text-green-400 font-semibold text-sm">FREE</span>
+                </div>
+                <p className="text-white font-medium">.hosting.jp</p>
+              </div>
+              <div className="bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-center">
+                <p className="text-yellow-400 font-semibold text-sm mb-2">₹50</p>
+                <p className="text-white font-medium">.fun</p>
+              </div>
+              <div className="bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-center">
+                <p className="text-blue-400 font-semibold text-sm mb-2">₹100</p>
+                <p className="text-white font-medium">.com</p>
+              </div>
+              <div className="bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-center">
+                <p className="text-purple-400 font-semibold text-sm mb-2">₹150</p>
+                <p className="text-white font-medium">.net</p>
+              </div>
+              <div className="bg-white bg-opacity-10 border border-white border-opacity-20 rounded-lg p-3 text-center">
+                <p className="text-orange-400 font-semibold text-sm mb-2">₹200</p>
+                <p className="text-white font-medium">.in</p>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -172,7 +227,7 @@ const Dashboard: React.FC = () => {
                   🎉 Claim Your Free Server!
                 </h3>
                 <p className="text-blue-200 text-lg">
-                  Get started with a free 7-day Minecraft server. No credit card required!
+                  Get started with a free 7-day Minecraft server + free .hosting.jp domain!
                 </p>
               </div>
               <Link
@@ -198,6 +253,11 @@ const Dashboard: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Domain Manager Modal */}
+        {showDomainManager && (
+          <DomainManager onClose={() => setShowDomainManager(false)} />
+        )}
       </div>
     </div>
   );
