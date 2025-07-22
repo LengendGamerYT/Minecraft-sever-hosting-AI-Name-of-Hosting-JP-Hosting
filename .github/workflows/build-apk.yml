@@ -3,8 +3,6 @@ name: Build and Release Android APK
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
   workflow_dispatch:
 
 jobs:
@@ -41,21 +39,33 @@ jobs:
         cd client
         npm run build
         
-    - name: Install Capacitor CLI
+    - name: Install Capacitor CLI globally
+      run: npm install -g @capacitor/cli
+      
+    - name: Create missing cordova variables file
       run: |
         cd client
-        npm install -g @capacitor/cli
+        mkdir -p android/capacitor-cordova-android-plugins
+        touch android/capacitor-cordova-android-plugins/cordova.variables.gradle
+        echo "// Generated cordova variables file" > android/capacitor-cordova-android-plugins/cordova.variables.gradle
         
-    - name: Sync Capacitor
+    - name: Sync Capacitor (with retry)
       run: |
         cd client
-        npx cap sync android
+        npx cap sync android || (
+          echo "First sync failed, trying to recreate android platform..."
+          rm -rf android
+          npx cap add android
+          npx cap sync android
+        )
         
+    - name: Make gradlew executable
+      run: chmod +x client/android/gradlew
+      
     - name: Build Android APK
       run: |
         cd client/android
-        chmod +x ./gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug --stacktrace
         
     - name: Upload APK artifact
       uses: actions/upload-artifact@v4
@@ -72,21 +82,40 @@ jobs:
         body: |
           🚀 **JP Hosting - Minecraft Server Hosting App**
           
-          ✨ **Features:**
-          - Advanced Server Control Panel (Darco-style)
-          - Custom Domain Management (.hosting.jp free, paid domains)
-          - UPI Payment Integration (jaydendpenha@fam)
-          - Real-time Server Monitoring
-          - File Manager with Editor
-          - Persistent Authentication
-          - Beautiful Modern UI
+          ✨ **New Features:**
+          - 🎮 Advanced Server Control Panel (Darco-style)
+            • Live console with command execution
+            • File manager with editor capabilities  
+            • Real-time server monitoring
+            • Start/Stop/Restart controls
           
-          📱 **Installation:**
+          - 🌐 Custom Domain Management
+            • FREE .hosting.jp domain for all users
+            • Paid domains: .fun (₹50), .com (₹100), .net (₹150), .in (₹200)
+            • Easy domain-to-server connection
+          
+          - 💰 UPI Payment Integration
+            • All payments go to: jaydendpenha@fam
+            • QR code generation for mobile payments
+            • Transaction ID verification
+          
+          - 🔐 Persistent Authentication
+            • Stay logged in across sessions
+            • Secure JWT token system
+          
+          - 🎨 Beautiful Modern UI
+            • Glass morphism effects
+            • Responsive design
+            • Professional animations
+          
+          📱 **Installation Instructions:**
           1. Download the APK file below
-          2. Enable "Install from Unknown Sources" on your Android device
-          3. Install and enjoy your Minecraft server hosting platform!
+          2. Enable "Install from Unknown Sources" in Android settings
+          3. Install and start your Minecraft hosting business!
           
-          💰 **Payment:** All transactions go to UPI ID: jaydendpenha@fam
+          💳 **Payment Info:** All transactions go to UPI ID: **jaydendpenha@fam**
+          
+          🆓 **Free Plan:** Get your first server free for 7 days + free .hosting.jp domain!
           
         files: |
           client/android/app/build/outputs/apk/debug/app-debug.apk
