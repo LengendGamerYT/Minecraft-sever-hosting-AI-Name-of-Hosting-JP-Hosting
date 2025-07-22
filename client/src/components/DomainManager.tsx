@@ -150,7 +150,7 @@ const DomainManager: React.FC<DomainManagerProps> = ({ serverId, serverName, onC
   };
 
   const deleteDomain = (domainId: string) => {
-    if (confirm('Are you sure you want to delete this domain?')) {
+    if (window.confirm('Are you sure you want to delete this domain?')) {
       setDomains(prev => prev.filter(d => d.id !== domainId));
     }
   };
